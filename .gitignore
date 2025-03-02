@@ -5,4 +5,5 @@ config.json
 bot_[0-9]*.log
 
 # Prevent uploading IDE stuff
+__pycache__
 .idea
