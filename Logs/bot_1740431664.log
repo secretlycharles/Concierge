@@ -1,0 +1,20 @@
+2025-02-24 13:14:26,508 - INFO - you can start 1000 sessions before the next window which starts at 2025-02-24 13:14:26.508419-08:00; planning to start 1 session... 
+2025-02-24 13:14:26,679 - INFO - identifying with new session
+2025-02-24 13:14:26,880 - INFO - shard is ready: 1 guilds, LLM Bot#9673 (1339393176406069360), session '152899da47d61a96e916a8e7344d1e01' on v10 gateway
+2025-02-24 13:14:26,881 - INFO - started successfully in approx 1.95 seconds
+2025-02-24 13:14:35,109 - ERROR - secretlycharles/1316112944290988124 failed to process request! Error: model "llama3.3" not found, try pulling it first (status code: 404)
+2025-02-24 14:45:06,970 - INFO - received instruction to reconnect, will resume existing session
+2025-02-24 14:45:07,519 - INFO - resuming session 152899da47d61a96e916a8e7344d1e01
+2025-02-24 14:45:07,606 - INFO - resumed session [session:152899da47d61a96e916a8e7344d1e01, seq:30]
+2025-02-24 15:16:03,582 - WARNING - failed to communicate with server, reason was: 'Socket has closed'. Will retry shortly
+2025-02-24 15:16:04,040 - INFO - resuming session 152899da47d61a96e916a8e7344d1e01
+2025-02-24 15:16:04,139 - INFO - resumed session [session:152899da47d61a96e916a8e7344d1e01, seq:36]
+2025-02-24 16:21:54,090 - WARNING - failed to communicate with server, reason was: 'Socket has closed'. Will retry shortly
+2025-02-24 16:21:54,517 - INFO - resuming session 152899da47d61a96e916a8e7344d1e01
+2025-02-24 16:21:54,609 - INFO - resumed session [session:152899da47d61a96e916a8e7344d1e01, seq:45]
+2025-02-24 18:19:05,409 - INFO - received instruction to reconnect, will resume existing session
+2025-02-24 18:19:05,982 - INFO - resuming session 152899da47d61a96e916a8e7344d1e01
+2025-02-24 18:19:06,088 - INFO - resumed session [session:152899da47d61a96e916a8e7344d1e01, seq:80]
+2025-02-24 21:25:30,059 - INFO - received instruction to reconnect, will resume existing session
+2025-02-24 21:25:30,598 - INFO - resuming session 152899da47d61a96e916a8e7344d1e01
+2025-02-24 21:25:30,692 - INFO - resumed session [session:152899da47d61a96e916a8e7344d1e01, seq:117]

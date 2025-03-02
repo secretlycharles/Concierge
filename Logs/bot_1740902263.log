@@ -1,0 +1,13 @@
+2025-03-01 23:57:44,542 - INFO - A newer version of hikari is available, consider upgrading to 2.1.1
+2025-03-01 23:57:45,506 - INFO - you can start 1000 sessions before the next window which starts at 2025-03-01 23:57:45.506785-08:00; planning to start 1 session... 
+2025-03-01 23:57:45,688 - INFO - identifying with new session
+2025-03-01 23:57:45,928 - INFO - shard is ready: 1 guilds, LLM Bot#9673 (1339393176406069360), session '7c8df52713ce0cbd9ee03029e7479523' on v10 gateway
+2025-03-01 23:57:45,930 - INFO - started successfully in approx 2.07 seconds
+2025-03-01 23:58:22,923 - ERROR - an exception occurred handling an event (GuildMessageCreateEvent)
+Traceback (most recent call last):
+  File "C:\Users\eleve\Desktop\Projects\College\SchoolAIDiscordBot\Source\Client\bot.py", line 82, in on_message
+    msg = event.content.lower()
+          ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+2025-03-01 23:58:29,455 - INFO - bot requested to shut down
+2025-03-01 23:58:29,455 - INFO - shard has been requested to shutdown
