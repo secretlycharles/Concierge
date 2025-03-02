@@ -1,0 +1,8 @@
+# Prevent uploading the entire production json
+config.json
+
+# Prevent uploading bot logs
+bot_[0-9]*.log
+
+# Prevent uploading IDE stuff
+.idea
