@@ -67,7 +67,7 @@ class Bot(commands.Bot):
     def __init__(self, config: dict):
         super().__init__(
             intents=intents,
-            command_prefix=""
+            command_prefix="bro_why_is_this_required"
         )
 
         # Bot's file based logger
