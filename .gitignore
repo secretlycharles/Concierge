@@ -1,0 +1,9 @@
+# Prevent uploading the entire production json
+settings.json
+
+# Prevent uploading bot logs
+.log
+
+# Prevent uploading IDE stuff
+__pycache__
+.idea
