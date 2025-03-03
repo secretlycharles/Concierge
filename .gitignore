@@ -2,7 +2,7 @@
 settings.json
 
 # Prevent uploading bot logs
-.log
+*.log
 
 # Prevent uploading IDE stuff
 __pycache__

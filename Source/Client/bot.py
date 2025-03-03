@@ -175,33 +175,3 @@ class Bot(commands.Bot):
                 f"Interaction Executed! Command: '/{interaction.command.name}' by '{interaction.user}' in '#{interaction.channel}/{interaction.channel_id}'"
             )
 
-    async def on_message(self, message: Message, /) -> None:
-        """
-        Replies with a copypasta if a trigger word is detected.
-
-        :param message: Message
-        :return: None
-        """
-        # Only execute if user is human
-        if message.author.bot:
-            return
-
-        # Handle a reply
-        msg = message.content.lower()
-
-        # Execute only if there's a trigger word
-        trigger_word = next((trigger for trigger in self.config["llm"]["triggers"] if trigger in msg), None)
-        if trigger_word is None:
-            return
-        logging.info(
-            f"{message.guild.name}/{message.channel.name} a trigger word was detected! Detected Word: '{trigger_word}'")
-
-        # Handle a reply
-        copypasta = self.config["copypasta"].get(trigger_word, None)
-        if copypasta is None:
-            logging.error(f"A copypasta was detected! But no reply was set for it, Detected Word: '{trigger_word}'")
-            return
-
-        # Reply with copypasta
-        reply = ' '.join(copypasta)
-        await message.reply(reply)
