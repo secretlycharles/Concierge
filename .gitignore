@@ -1,6 +1,8 @@
 # Prevent uploading the entire production json
 settings.json
 
+Logs/
+
 # Prevent uploading bot logs
 *.log
 

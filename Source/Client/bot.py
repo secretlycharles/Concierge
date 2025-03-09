@@ -3,7 +3,6 @@
 # Important Discord Libraries
 from discord.app_commands import errors
 from discord.ext import commands
-from discord import Message
 import discord
 
 # Needed libraries
@@ -14,6 +13,10 @@ import os
 # Setup base intents
 intents = discord.Intents.all()
 intents.message_content = True
+
+LOGGING_DIR = "./Logs/"
+LOG_FILE = "discord.log"
+PATH_HANDLE = os.path.join(LOGGING_DIR, LOG_FILE)
 
 class LoggingFormatter(logging.Formatter):
     # Colors
@@ -35,7 +38,7 @@ class LoggingFormatter(logging.Formatter):
         logging.CRITICAL: red + bold,
     }
 
-    def format(self, record):
+    def format(self, record: logging.LogRecord):
         log_color = self.COLORS[record.levelno]
         format = "(black){asctime}(reset) (levelcolor){levelname:<8}(reset) (green){name}(reset) {message}"
         format = format.replace("(black)", self.black + self.bold)
@@ -45,6 +48,14 @@ class LoggingFormatter(logging.Formatter):
         formatter = logging.Formatter(format, "%Y-%m-%d %H:%M:%S", style="{")
         return formatter.format(record)
 
+def grab_file_handler():
+    # check if our log dir exists first
+    exists = os.path.exists(PATH_HANDLE)
+    if not exists:
+        os.mkdir(LOGGING_DIR)
+        open(LOGGING_DIR+LOG_FILE, 'x')
+    
+
 logger = logging.getLogger("discord_bot")
 logger.setLevel(logging.INFO)
 
@@ -53,7 +64,8 @@ console_handler = logging.StreamHandler()
 console_handler.setFormatter(LoggingFormatter())
 
 # File handler
-file_handler = logging.FileHandler(filename="./Logs/discord.log", encoding="utf-8", mode="w")
+grab_file_handler()
+file_handler = logging.FileHandler(filename=PATH_HANDLE, encoding="utf-8", mode="w")
 file_handler_formatter = logging.Formatter(
     "[{asctime}] [{levelname:<8}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
 )
@@ -64,7 +76,7 @@ logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
 class Bot(commands.Bot):
-    def __init__(self, config: dict):
+    def __init__(self, config: dict[str, str]):
         super().__init__(
             intents=intents,
             command_prefix="bro_why_is_this_required"
@@ -82,7 +94,7 @@ class Bot(commands.Bot):
 
         :return: None
         """
-        self.logger.info(f"Logged in as {self.user.name}")
+        self.logger.info(f"Logged in as {self.user.name}") #type: ignore
         self.logger.info(f"discord.py API version: {discord.__version__}")
         self.logger.info(f"Python version: {platform.python_version()}")
         self.logger.info(
@@ -123,7 +135,7 @@ class Bot(commands.Bot):
 
         :return:
         """
-        self.logger.info(f"'{self.user.name}' has connected to Discord!")
+        self.logger.info(f"'{self.user.name}' has connected to Discord!") #type: ignore
 
     async def on_app_command_error(self, interaction: discord.Interaction, exception: errors.AppCommandError, /) -> None:
         """
@@ -133,7 +145,7 @@ class Bot(commands.Bot):
         :param exception: errors.AppCommandError
         :return: None
         """
-        self.logger.error(f"Error while executing command '{interaction.command.name}': {exception}")
+        self.logger.error(f"Error while executing command '{interaction.command.name}': {exception}") #type: ignore
 
         """
         TODO: Add a more robust error handling system that will log errors and return the correct error message to the
