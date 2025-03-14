@@ -1,6 +1,10 @@
 # Prevent uploading the entire production json
 settings.json
 
+# Prevent uploading venv
+.venv
+
+# Prevent uploading logs
 Logs/
 
 # Prevent uploading bot logs
@@ -9,3 +13,4 @@ Logs/
 # Prevent uploading IDE stuff
 __pycache__
 .idea
+
