@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Source.Client.bot import Bot
+from source.client.bot import Bot
 
 import json
 
@@ -13,7 +13,7 @@ def main() -> None:
    """
 
     # Read config file
-    with open("./Config/settings.json", "r") as f:
+    with open("config/settings.json", "r") as f:
         config = json.loads(f.read())
 
     # Create bot instance

@@ -13,7 +13,7 @@ import os
 intents = discord.Intents.all()
 intents.message_content = True
 
-LOGGING_DIR = "./Logs/"
+LOGGING_DIR = "./logs/"
 LOG_FILE = "discord.log"
 PATH_HANDLE = os.path.join(LOGGING_DIR, LOG_FILE)
 
@@ -176,7 +176,7 @@ class Bot(commands.Bot):
 
     async def on_interaction(self, interaction: discord.Interaction) -> None:
         """
-        Logs all interactions executed by users.
+        logs all interactions executed by users.
 
         :param interaction: discord.Interaction
         :return: None

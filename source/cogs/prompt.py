@@ -2,7 +2,7 @@
 
 # Bot/LLM libraries
 from ollama import AsyncClient
-from Source.Client.bot import Bot
+from source.client.bot import Bot
 from discord.ext import commands
 
 # Needed libraries
@@ -10,7 +10,7 @@ import discord
 import random
 import re
 
-from Source.Util.ContextManager import ContextManager
+from source.utilities.context_manager import ContextManager
 
 
 class PromptCommand(commands.Cog):

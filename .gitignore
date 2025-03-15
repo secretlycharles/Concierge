@@ -5,7 +5,7 @@ settings.json
 .venv
 
 # Prevent uploading logs
-Logs/
+logs/
 
 # Prevent uploading bot logs
 *.log
