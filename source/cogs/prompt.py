@@ -49,7 +49,7 @@ class PromptCommand(commands.Cog):
         # Will choose a randomly model from config file (make sure they are actually downloaded 💀)
         model = random.choice(self.config['llm']['models'])
 
-        # Get a response from llm model (only ollama for rn)
+        # Get a response from llm model
         response = await self.ollama_client.chat(
             model=model,
             messages=[
