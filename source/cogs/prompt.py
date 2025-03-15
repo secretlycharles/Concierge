@@ -55,8 +55,12 @@ class PromptCommand(commands.Cog):
             model=model,
             messages=[
                 {
+                    'role': 'system', # For setting LLM restraints this is the best way.
+                    'content': '\n'.join(self.config['llm']['pre_prompt'])
+                },
+                {
                     'role': 'user',
-                    'content': '\n'.join(self.config['llm']['pre_prompt']) + f"\n\nUser Said: {message}"
+                    'content': f"\n\nUser Said: {message}"
                 }
             ]
         )
