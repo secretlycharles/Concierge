@@ -39,14 +39,14 @@ class ContextManager:
         """
         self.add_guild(guild_id)  # Ensure the guild exists first
         if user_id not in self.context_dictionary[guild_id]:
-            self.context_dictionary[guild_id][user_id] = [{}]
+            self.context_dictionary[guild_id][user_id] = []
 
     def add_context(self, guild_id: int, user_id: int, messages: List[Dict]) -> None:
         """
         Adds multiple messages to the context of a specific user in a given guild.
         """
         self.add_user(guild_id, user_id) # Ensure the user exists first
-        self.context_dictionary[guild_id][user_id].append(messages)
+        self.context_dictionary[guild_id][user_id].extend(messages)
 
     def get_context(self, guild_id: int, user_id: int) -> List[Dict]:
         """

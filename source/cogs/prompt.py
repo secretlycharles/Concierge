@@ -8,7 +8,7 @@ from ollama import AsyncClient
 
 # Needed libraries
 import discord
-import random
+import json
 
 
 class PromptCommand(commands.Cog):
@@ -58,9 +58,6 @@ class PromptCommand(commands.Cog):
         # Implement context window
         context = self.context_handler.get_context(guild_id=interaction.guild_id, user_id=interaction.user.id)
 
-        # Implement context window
-        context = self.context_handler.get_context(guild_id=interaction.guild_id, user_id=interaction.user.id)
-
         # Build messages based on context window
         messages = [
             {
@@ -74,24 +71,16 @@ class PromptCommand(commands.Cog):
             messages.extend(context)  # Unpack list of context dictionaries
 
         # Add the user message
-        messages.append({
+        message = {
             'role': 'user',
             'content': message
-        })
+        }
+        messages.append(message)
 
         # Get a response from llm model
         response = await self.ollama_client.chat(
             model=model,
-            messages=[
-                {
-                    'role': 'system',  # For setting LLM restraints this is the best way.
-                    'content': '\n'.join(self.config['llm']['pre_prompt'])
-                },
-                {
-                    'role': 'user',
-                    'content': f"\n\nUser Said: {message}"
-                }
-            ]
+            messages=messages,
         )
 
         # Log the model
@@ -99,10 +88,25 @@ class PromptCommand(commands.Cog):
         self.bot.logger.debug(response)  # debug log the entire response
 
         # Reply to user with a specific way depending on the model
+        llm_response = response.message.content
         if "deepseek" in model:
-            await interaction.followup.send(response['message']['content'].split("</think>")[1])
-        else:
-            await interaction.followup.send(response['message']['content'])
+            llm_response = llm_response.split("</think>")[1]
+
+        # Follow up with a message to the user
+        await interaction.followup.send(llm_response)
+
+        # Append context to the manager
+        self.context_handler.add_context(
+            guild_id=interaction.guild_id,
+            user_id=interaction.user.id,
+            messages=[
+                message,
+                {
+                    "role": "assistant",
+                    "content": llm_response
+                }
+            ]
+        )
 
 
 async def setup(bot: Bot):
