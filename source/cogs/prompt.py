@@ -55,6 +55,30 @@ class PromptCommand(commands.Cog):
                 "An error has occurred, No model was set!! How am I suppose to talk :rage:"
             )
 
+        # Implement context window
+        context = self.context_handler.get_context(guild_id=interaction.guild_id, user_id=interaction.user.id)
+
+        # Implement context window
+        context = self.context_handler.get_context(guild_id=interaction.guild_id, user_id=interaction.user.id)
+
+        # Build messages based on context window
+        messages = [
+            {
+                'role': 'system',
+                'content': '\n'.join(self.config['llm']['pre_prompt'])
+            }
+        ]
+
+        # Ensure context is correctly inserted (we're returned a list, so we must unpack it into dicts)
+        if isinstance(context, list):  # Ensure it is a list
+            messages.extend(context)  # Unpack list of context dictionaries
+
+        # Add the user message
+        messages.append({
+            'role': 'user',
+            'content': message
+        })
+
         # Get a response from llm model
         response = await self.ollama_client.chat(
             model=model,

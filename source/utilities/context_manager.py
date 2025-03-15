@@ -24,7 +24,7 @@ class ContextManager:
             - `"role"`: Defines whether the message is from the `"user"` or `"assistant"`.
             - `"message"`: The actual text content of the message.
         """
-        self.context_dictionary: Dict[int, Dict[int, List[str, str]]] = {}
+        self.context_dictionary: Dict[int, Dict[int, List]] = {}
 
     def add_guild(self, guild_id: int) -> None:
         """
@@ -39,16 +39,16 @@ class ContextManager:
         """
         self.add_guild(guild_id)  # Ensure the guild exists first
         if user_id not in self.context_dictionary[guild_id]:
-            self.context_dictionary[guild_id][user_id] = []
+            self.context_dictionary[guild_id][user_id] = [{}]
 
-    def add_context(self, guild_id: int, user_id: int, messages: List[dict[str, str]]) -> None:
+    def add_context(self, guild_id: int, user_id: int, messages: List[Dict]) -> None:
         """
         Adds multiple messages to the context of a specific user in a given guild.
         """
         self.add_user(guild_id, user_id) # Ensure the user exists first
         self.context_dictionary[guild_id][user_id].append(messages)
 
-    def get_context(self, guild_id: int, user_id: int) -> List[str]:
+    def get_context(self, guild_id: int, user_id: int) -> List[Dict]:
         """
         Retrieves the message context for a user in a guild.
         """
