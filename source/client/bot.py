@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Important Discord Librariesfrom discord.app_commands import errors
+# Important Discord Libraries
+from discord.app_commands import errors
 from discord.ext import commands
 import discord
 
@@ -116,11 +117,11 @@ class Bot(commands.Bot):
 
         :return: None
         """
-        for file in os.listdir(f"./Source/Cogs"):
+        for file in os.listdir(f"./source/cogs"):
             if file.endswith(".py"):
                 extension = file[:-3]
                 try:
-                    await self.load_extension(f"Source.Cogs.{extension}")
+                    await self.load_extension(f"source.cogs.{extension}")
                     self.logger.info(f"Loaded extension '{extension}'")
                 except Exception as e:
                     exception = f"{type(e).__name__}: {e}"
