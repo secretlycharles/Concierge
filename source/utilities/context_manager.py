@@ -2,7 +2,7 @@ from typing import Dict, List
 
 
 class ContextManager:
-    def __init__(self):
+    def __init__(self, context_length = 131072):
         """
         Initializes a context manager with a nested dictionary structure.
 
@@ -25,6 +25,9 @@ class ContextManager:
             - `"message"`: The actual text content of the message.
         """
         self.context_dictionary: Dict[int, Dict[int, List]] = {}
+
+        # The amount of tokens a model can handle
+        self.context_length: int = context_length
 
     def add_guild(self, guild_id: int) -> None:
         """

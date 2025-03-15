@@ -1,23 +1,18 @@
 # -*- coding: utf-8 -*-
 
 # Bot/LLM libraries
-from source.utilities.context_manager import ContextManager
+from source.utilities.ollama_client import OllamaClient
 from source.client.bot import Bot
 from discord.ext import commands
-from ollama import AsyncClient
 
 # Needed libraries
 import discord
-import json
 
 
 class PromptCommand(commands.Cog):
     def __init__(self, bot):
         # Bot object
         self.bot = bot
-
-        # Context handler
-        self.context_handler = ContextManager()
 
         # Get config
         self.config = self.bot.config
@@ -26,7 +21,7 @@ class PromptCommand(commands.Cog):
         self.error_handler = self.bot.on_app_command_error
 
         # Persistent Ollama Client
-        self.ollama_client = AsyncClient()
+        self.ollama_client = OllamaClient(bot=self.bot, config=self.config)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -52,61 +47,27 @@ class PromptCommand(commands.Cog):
         # Return an error message if no model was set
         if model == "":
             return await interaction.followup.send(
-                "An error has occurred, No model was set!! How am I suppose to talk :rage:"
+                "An error has occurred, No model was set! Please contact the developers."
             )
 
-        # Implement context window
-        context = self.context_handler.get_context(guild_id=interaction.guild_id, user_id=interaction.user.id)
-
-        # Build messages based on context window
-        messages = [
-            {
-                'role': 'system',
-                'content': '\n'.join(self.config['llm']['pre_prompt'])
-            }
-        ]
-
-        # Ensure context is correctly inserted (we're returned a list, so we must unpack it into dicts)
-        if isinstance(context, list):  # Ensure it is a list
-            messages.extend(context)  # Unpack list of context dictionaries
-
-        # Add the user message
-        message = {
-            'role': 'user',
-            'content': message
-        }
-        messages.append(message)
-
-        # Get a response from llm model
-        response = await self.ollama_client.chat(
-            model=model,
-            messages=messages,
+        # Prompt llm model for response
+        success, response = await self.ollama_client.prompt(
+            guild_id=interaction.guild.id,
+            user_id=interaction.user.id,
+            message=message,
         )
+
+        # Check for failed success
+        if not success:
+            return await interaction.followup.send(
+                "An error has occurred, while trying to interact with our model! Please contact the developers."
+            )
 
         # Log the model
-        self.bot.logger.info(f"{interaction.user.name}/{interaction.user.id} ollama response replied with: {response.message.content}")
-        self.bot.logger.debug(response)  # debug log the entire response
-
-        # Reply to user with a specific way depending on the model
-        llm_response = response.message.content
-        if "deepseek" in model:
-            llm_response = llm_response.split("</think>")[1]
+        self.bot.logger.info(f"{interaction.user.name}/{interaction.user.id} ollama response replied with: {response}")
 
         # Follow up with a message to the user
-        await interaction.followup.send(llm_response)
-
-        # Append context to the manager
-        self.context_handler.add_context(
-            guild_id=interaction.guild_id,
-            user_id=interaction.user.id,
-            messages=[
-                message,
-                {
-                    "role": "assistant",
-                    "content": llm_response
-                }
-            ]
-        )
+        await interaction.followup.send(response)
 
 
 async def setup(bot: Bot):
