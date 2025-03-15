@@ -46,8 +46,14 @@ class PromptCommand(commands.Cog):
         # Print prompt
         self.bot.logger.info(f"{interaction.user.name}/{interaction.user.id} has prompted the bot for '{message}'")
 
-        # Will choose a randomly model from config file (make sure they are actually downloaded 💀)
-        model = random.choice(self.config['llm']['models'])
+        # Retrieve model from config file
+        model = self.config['llm']['model']
+
+        # Return an error message if no model was set
+        if model == "":
+            return await interaction.followup.send(
+                "An error has occurred, No model was set!! How am I suppose to talk :rage:"
+            )
 
         # Get a response from llm model
         response = await self.ollama_client.chat(

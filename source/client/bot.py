@@ -173,7 +173,7 @@ class Bot(commands.Bot):
 
         # Return error
         send_method = interaction.followup.send if interaction.response.is_done() else interaction.response.send_message
-        await send_method(content="An error has occurred, please contact our devs for further", ephemeral=True)
+        await send_method(content="An error has occurred, please contact the developers for this bot!", ephemeral=True)
 
     async def on_interaction(self, interaction: discord.Interaction) -> None:
         """
