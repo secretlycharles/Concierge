@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
 # Bot/LLM libraries
-from ollama import AsyncClient
+from source.utilities.context_manager import ContextManager
 from source.client.bot import Bot
 from discord.ext import commands
+from ollama import AsyncClient
 
 # Needed libraries
 import discord
 import random
-import re
-
-from source.utilities.context_manager import ContextManager
 
 
 class PromptCommand(commands.Cog):
@@ -19,15 +17,16 @@ class PromptCommand(commands.Cog):
         self.bot = bot
 
         # Context handler
-        self.context_handler = ContextManager(
-            max_tokens=4096
-        )
+        self.context_handler = ContextManager()
 
         # Get config
         self.config = self.bot.config
 
         # Assign error handler
         self.error_handler = self.bot.on_app_command_error
+
+        # Persistent Ollama Client
+        self.ollama_client = AsyncClient()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -51,11 +50,11 @@ class PromptCommand(commands.Cog):
         model = random.choice(self.config['llm']['models'])
 
         # Get a response from llm model (only ollama for rn)
-        response = await AsyncClient().chat(
+        response = await self.ollama_client.chat(
             model=model,
             messages=[
                 {
-                    'role': 'system', # For setting LLM restraints this is the best way.
+                    'role': 'system',  # For setting LLM restraints this is the best way.
                     'content': '\n'.join(self.config['llm']['pre_prompt'])
                 },
                 {
