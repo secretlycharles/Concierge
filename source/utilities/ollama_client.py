@@ -42,6 +42,7 @@ class OllamaClient:
             model=self.model,
             messages=messages
         )
+        self.bot.logger(f"LLM Response: {response}")
 
         # Trim response and remove thinking tag
         content = response.message.content.split("</think>")[1]
@@ -89,7 +90,8 @@ class OllamaClient:
         }
         messages.append(message)
 
-        print(f"Built prompt: {json.dumps(messages, indent=4)}")
+        # Debug log
+        # print(f"Built prompt: {json.dumps(messages, indent=4)}")
 
         # Return built prompt
         return messages
