@@ -1,3 +1,5 @@
+# Needed libs
+from transformers import AutoTokenizer
 from typing import Dict, List
 
 
@@ -25,6 +27,9 @@ class ContextManager:
             - `"message"`: The actual text content of the message.
         """
         self.context_dictionary: Dict[int, Dict[int, List]] = {}
+
+        # Load the tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1")
 
         # The amount of tokens a model can handle
         self.context_length: int = context_length
@@ -76,3 +81,13 @@ class ContextManager:
         Clears all stored contexts.
         """
         self.context_dictionary.clear()
+
+    def trim_user_context(self, guild_id: int, user_id: int) -> None:
+        """
+        Trim a user's context window, this may be a bad approach currently since we don't summarize
+        the LLMs responses yet. Say we trim some key context, the LLM won't know and try its best to respond.
+        """
+        context = self.get_context(guild_id, user_id)
+        if len(context) > 0:
+            self.context_dictionary[guild_id][user_id].pop(0) # Trim user prompt
+            self.context_dictionary[guild_id][user_id].pop(1) # Trim llm response
