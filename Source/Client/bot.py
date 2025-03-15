@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Important Discord Libraries
-from discord.app_commands import errors
+# Important Discord Librariesfrom discord.app_commands import errors
 from discord.ext import commands
 import discord
 

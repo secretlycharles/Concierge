@@ -10,10 +10,18 @@ import discord
 import random
 import re
 
+from Source.Util.ContextManager import ContextManager
+
+
 class PromptCommand(commands.Cog):
     def __init__(self, bot):
         # Bot object
         self.bot = bot
+
+        # Context handler
+        self.context_handler = ContextManager(
+            max_tokens=4096
+        )
 
         # Get config
         self.config = self.bot.config
