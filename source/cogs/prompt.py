@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Bot/LLM libraries
+from typing import Mapping
 from source.utilities.ollama_client import OllamaClient
 from source.client.bot import Bot
 from discord.ext import commands
@@ -28,7 +29,7 @@ class PromptCommand(commands.Cog):
         print(f"Prompt command loaded")
 
     @discord.app_commands.command(name="prompt", description="Talk to the bot")
-    async def prompt(self, interaction: discord.Interaction, message: str) -> None:
+    async def prompt(self, interaction: discord.Interaction, message: Mapping[str, str]) -> None:
         """
 
         :param interaction: discord.Interaction
@@ -52,7 +53,7 @@ class PromptCommand(commands.Cog):
 
         # Prompt llm model for response
         success, response = await self.ollama_client.prompt(
-            guild_id=interaction.guild.id,
+            guild_id=interaction.guild.id, #type: ignore
             user_id=interaction.user.id,
             message=message,
         )
