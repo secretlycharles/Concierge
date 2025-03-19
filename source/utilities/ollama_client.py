@@ -2,10 +2,10 @@
 # Discord/LLM Libs
 from source.utilities.context_manager import ContextManager
 from source.client.bot import Bot
-from ollama import AsyncClient
+from ollama import AsyncClient, ChatResponse
 
 # Needed libs
-from typing import Tuple, List
+from typing import Mapping, Tuple, List
 import json
 
 
@@ -26,7 +26,7 @@ class OllamaClient:
         # Context handler
         self.context_handler = ContextManager()
 
-    async def prompt(self, guild_id: int, user_id: int, message: str) -> Tuple[bool, str]:
+    async def prompt(self, guild_id: int, user_id: int, message: Mapping[str, str]) -> Tuple[bool, str]:
         """
         Prompt the LLM model
         """
@@ -38,14 +38,15 @@ class OllamaClient:
         messages = await self.build_prompt(guild_id, user_id, message)
 
         # Get a response from llm model
-        response = await self.client.chat(
+        response: ChatResponse = await self.client.chat(
             model=self.model,
             messages=messages
         )
+
         self.bot.logger.info(f"LLM Response: {response}")
 
         # Trim response and remove thinking tag
-        content = response.message.content.split("</think>")[1]
+        content = response.message.content.split("</think>")[1] # type: ignore
 
         # Add context to manger
         self.context_handler.add_context(
@@ -66,7 +67,7 @@ class OllamaClient:
         # Return response
         return True, content
 
-    async def build_prompt(self, guild_id: int, user_id: int, message: str) -> List:
+    async def build_prompt(self, guild_id: int, user_id: int, message: Mapping) -> List:
         """
         Build the LLM prompt while attempting to stay below the LLM models' context length
         """
