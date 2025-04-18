@@ -26,7 +26,7 @@ class OllamaClient:
         # Context handler
         self.context_handler = ContextManager()
 
-    async def prompt(self, guild_id: int, user_id: int, message: Mapping[str, str]) -> Tuple[bool, str]:
+    async def prompt(self, guild_id: int, user_id: int, message: str) -> Tuple[bool, str]:
         """
         Prompt the LLM model
         """
@@ -55,11 +55,11 @@ class OllamaClient:
             messages=[
                 {
                     'role': 'user',
-                    'content': message,
+                    'content': f"MEMORY USER ASKED TO DEEPSEEK: {message}",
                 },
                 {
                     'role': 'assistant',
-                    'content': content,
+                    'content': f"MEMORY REPLY TO USER: {content}",
                 }
             ]
         )
@@ -67,7 +67,7 @@ class OllamaClient:
         # Return response
         return True, content
 
-    async def build_prompt(self, guild_id: int, user_id: int, message: Mapping) -> List:
+    async def build_prompt(self, guild_id: int, user_id: int, message: str) -> List:
         """
         Build the LLM prompt while attempting to stay below the LLM models' context length
         """
@@ -81,7 +81,7 @@ class OllamaClient:
             messages = [
                 {
                     'role': 'system',
-                    'content': '\n'.join(self.config['llm']['pre_prompt'])
+                    'content': ' '.join(self.config['llm']['pre_prompt'])
                 }
             ]
 

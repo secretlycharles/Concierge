@@ -29,7 +29,7 @@ class PromptCommand(commands.Cog):
         print(f"Prompt command loaded")
 
     @discord.app_commands.command(name="prompt", description="Talk to the bot")
-    async def prompt(self, interaction: discord.Interaction, message: Mapping[str, str]) -> None:
+    async def prompt(self, interaction: discord.Interaction, message: str) -> None:
         """
 
         :param interaction: discord.Interaction
@@ -67,8 +67,21 @@ class PromptCommand(commands.Cog):
         # Log the model
         self.bot.logger.info(f"{interaction.user.name}/{interaction.user.id} ollama response replied with: {response}")
 
-        # Follow up with a message to the user
-        await interaction.followup.send(response)
+        # Follow up with a message to the user (CHATGPT GENERATED BABY!!!)
+        if len(response) <= 2000:
+            await interaction.followup.send(response)
+        else:
+            is_codeblock = response.startswith("```")
+
+            # If it's a codeblock, we will inject closing and opening ```` at split points
+            chunks = [response[i:i + 1990] for i in range(0, len(response), 1990)] if is_codeblock else [
+                response[i:i + 2000] for i in range(0, len(response), 2000)]
+
+            for idx, chunk in enumerate(chunks):
+                if is_codeblock:
+                    # Add wrapping ``` to each chunk
+                    chunk = f"```\n{chunk}\n```"
+                await interaction.followup.send(chunk)
 
 
 async def setup(bot: Bot):
