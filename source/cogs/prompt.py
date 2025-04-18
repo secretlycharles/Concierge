@@ -67,20 +67,18 @@ class PromptCommand(commands.Cog):
         # Log the model
         self.bot.logger.info(f"{interaction.user.name}/{interaction.user.id} ollama response replied with: {response}")
 
-        # Follow up with a message to the user (CHATGPT GENERATED BABY!!!)
+        # Follow up with a message to the user
         if len(response) <= 2000:
             await interaction.followup.send(response)
         else:
-            is_codeblock = response.startswith("```")
+            # Split into chunks of 2000 characters
+            chunks = [response[i:i + 2000] for i in range(0, len(response), 2000)]
 
-            # If it's a codeblock, we will inject closing and opening ```` at split points
-            chunks = [response[i:i + 1990] for i in range(0, len(response), 1990)] if is_codeblock else [
-                response[i:i + 2000] for i in range(0, len(response), 2000)]
+            # Send the first chunk
+            await interaction.followup.send(chunks[0])
 
-            for idx, chunk in enumerate(chunks):
-                if is_codeblock:
-                    # Add wrapping ``` to each chunk
-                    chunk = f"```\n{chunk}\n```"
+            # Send the rest of the chunks
+            for chunk in chunks[1:]:
                 await interaction.followup.send(chunk)
 
 
