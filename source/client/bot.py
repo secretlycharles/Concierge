@@ -6,6 +6,7 @@ from discord.ext import commands
 import discord
 
 # Needed libraries
+import difflib
 import platform
 import logging
 import os
@@ -136,6 +137,16 @@ class Bot(commands.Bot):
         :return:
         """
         self.logger.info(f"'{self.user.name}' has connected to Discord!") #type: ignore
+
+    async def on_message(self, message: discord.Message) -> None:
+        """
+        Help users navigate the server
+        :param message:
+        :return:
+        """
+        # Only reply to humans
+        if message.author.bot:
+            return
 
     async def on_app_command_error(self, interaction: discord.Interaction, exception: errors.AppCommandError, /) -> None:
         """

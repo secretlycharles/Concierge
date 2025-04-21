@@ -88,6 +88,6 @@ class ContextManager:
         the LLMs responses yet. Say we trim some key context, the LLM won't know and try its best to respond.
         """
         context = self.get_context(guild_id, user_id)
-        if len(context) > 0:
+        if len(context) >= 2:
             self.context_dictionary[guild_id][user_id].pop(0) # Trim user prompt
             self.context_dictionary[guild_id][user_id].pop(1) # Trim llm response
