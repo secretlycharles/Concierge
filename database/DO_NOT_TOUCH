@@ -1,0 +1,2 @@
+// Modifying anything here without any prior knowledge may and will potentially destroy memory loading.
+// This system doesn't have any full on failsafe, though logically works under normal context.

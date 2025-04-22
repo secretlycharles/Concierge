@@ -19,6 +19,11 @@ class Database:
         Loop through all servers and users in the database
         """
         for guild_id in os.listdir("./database"):
+            # Don't load this file, it's not valided
+            if "DO_NOT_TOUCH" in guild_id:
+                continue
+
+            # Load database
             for user_id in os.listdir(f"./database/{guild_id}"):
                 with open(f"./database/{guild_id}/{user_id}", "r") as file:
                     # Clean User_ID so it doesn't have .json

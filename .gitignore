@@ -14,5 +14,8 @@ logs/
 __pycache__
 .idea
 
-# Prevent updating database
-/database/*
+# Ignore everything in database/
+database/**
+
+# But do not ignore this file
+!database/DO_NOT_TOUCH
