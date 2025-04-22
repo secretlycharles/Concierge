@@ -46,7 +46,10 @@ class OllamaClient:
         self.bot.logger.info(f"LLM Response: {response}")
 
         # Get bot content
-        content = response.message.content # type: ignore
+        if "Summary: " in response.message.content:
+            content = response.message.content.split("Summary: ")[0]
+        else:
+            content = response.message.content # type: ignore
 
         # Add context to manger
         self.context_handler.add_context(
