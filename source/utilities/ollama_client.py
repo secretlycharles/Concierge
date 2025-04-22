@@ -45,8 +45,8 @@ class OllamaClient:
 
         self.bot.logger.info(f"LLM Response: {response}")
 
-        # Trim response and remove thinking tag
-        content = response.message.content.split("</think>")[1] # type: ignore
+        # Get bot content
+        content = response.message.content # type: ignore
 
         # Add context to manger
         self.context_handler.add_context(
@@ -55,11 +55,11 @@ class OllamaClient:
             messages=[
                 {
                     'role': 'user',
-                    'content': f"MEMORY USER ASKED TO DEEPSEEK: {message}",
+                    'content': f"{message}",
                 },
                 {
                     'role': 'assistant',
-                    'content': f"MEMORY REPLY TO USER: {content}",
+                    'content': f"{content}",
                 }
             ]
         )
@@ -100,14 +100,17 @@ class OllamaClient:
             prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in messages])
             prompt_tokens = len(self.context_handler.tokenizer.encode(prompt))
             model_context_length = self.context_handler.context_length
-            self.bot.logger.info(f"Prompt Tokens: {prompt_tokens}, Model Context Length: {model_context_length}")
+            self.bot.logger.info(f"Prompt Tokens: {prompt_tokens}, Model Context Length: {model_context_length}, Generated Prompt: {prompt}")
 
             # Check if we have to trim or not
             if prompt_tokens <= self.context_handler.context_length:
                 break
-            else:
-                # Trims the first message in the list until the context length is less than the models' context length
-                self.context_handler.trim_user_context(guild_id=guild_id, user_id=user_id)
+
+            # Honestly, it would be impossible for the context window to reach over 120k+?? Discord wouldn't even allow it, nor the discord bot unless
+            # The prompt was outrageously large.
+
+            # Trims the first message in the list until the context length is less than the models' context length
+            self.context_handler.trim_user_context(guild_id=guild_id, user_id=user_id)
 
 
         # Return built prompt

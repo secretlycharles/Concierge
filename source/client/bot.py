@@ -136,7 +136,11 @@ class Bot(commands.Bot):
 
         :return:
         """
+        # Send debug message in the logger
         self.logger.info(f"'{self.user.name}' has connected to Discord!") #type: ignore
+
+        # Send debug message
+        await self.get_channel(1364032532328480768).send("Bot is now online!")
 
     async def on_message(self, message: discord.Message) -> None:
         """

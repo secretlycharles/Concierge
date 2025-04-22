@@ -4,6 +4,6 @@
     },
     "llm": {
       "pre_prompt": [],
-      "model": "deepseek-r1:7b-qwen-distill-q4_K_M"
+      "model": "gemma3:4b-it-q4_K_M"
     }
   }

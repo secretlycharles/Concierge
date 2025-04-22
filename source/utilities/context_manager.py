@@ -1,4 +1,5 @@
 # Needed libs
+from source.utilities.database import Database
 from transformers import AutoTokenizer
 from typing import Dict, List
 
@@ -34,6 +35,10 @@ class ContextManager:
         # The amount of tokens a model can handle
         self.context_length: int = context_length
 
+        # Database Handler
+        self.database = Database(context_manager=self)
+        self.database.load_db()
+
     def add_guild(self, guild_id: int) -> None:
         """
         Ensures that a guild exists in the context dictionary.
@@ -53,8 +58,18 @@ class ContextManager:
         """
         Adds multiple messages to the context of a specific user in a given guild.
         """
-        self.add_user(guild_id, user_id) # Ensure the user exists first
+        # Ensure the user exists first
+        self.add_user(guild_id, user_id)
+
+        # Append to context
         self.context_dictionary[guild_id][user_id].extend(messages)
+
+        # Write to database
+        self.database.write_db(
+            guild_id=guild_id,
+            user_id=user_id,
+            context=self.context_dictionary[guild_id][user_id]
+        )
 
     def get_context(self, guild_id: int, user_id: int) -> List[Dict]:
         """
