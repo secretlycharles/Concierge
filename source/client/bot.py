@@ -140,7 +140,8 @@ class Bot(commands.Bot):
         self.logger.info(f"'{self.user.name}' has connected to Discord!") #type: ignore
 
         # Send debug message
-        await self.get_channel(1364032532328480768).send("Bot is now online!")
+        if self.config['discord'].get('on_ready_channel') is not None:
+            await self.get_channel(self.config['discord']['on_ready_channel']).send("Bot is now online!")
 
     async def on_message(self, message: discord.Message) -> None:
         """
