@@ -7,7 +7,7 @@ import os
 class Database:
     def __init__(self, context_manager):
         """
-        JSON Based Database System because I'm too lazy to develop anything further and I'm busy
+        JSON Based Database System because I'm too lazy to develop anything further, and I'm busy
         with a ton of different projects.
         """
         # Context Manager
