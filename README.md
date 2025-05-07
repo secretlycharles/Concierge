@@ -86,7 +86,7 @@ The pre-prompt is used as a system prompt for the LLM to guide user interactions
 {
     "discord": {
       "token": "<Your Bot Token>",
-      "on_ready_channel": 1364032532328480768
+      "on_ready_channel": "<Your Guild ID in a int/number format>"
     },
     "llm": {
       "pre_prompt": [
